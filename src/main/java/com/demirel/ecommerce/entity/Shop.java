@@ -1,7 +1,5 @@
 package com.demirel.ecommerce.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -14,16 +12,21 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "category", schema = "ecommerce")
-public class Category {
+@Table(name = "shop", schema = "ecommerce")
+public class Shop {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Short id;
+    private Long id;
 
-    @Column(name = "category_name")
-    private String categoryName;
+    @Column(name = "shop_name")
+    private String shopName;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("category")
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonManagedReference
+    private User user;
+
+    @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Product> products;
 }
